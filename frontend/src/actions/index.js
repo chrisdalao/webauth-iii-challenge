@@ -35,7 +35,7 @@ export const login = credentials => dispatch => {
         .catch(err => {
             dispatch({
                 type: LOGIN_FAILURE,
-                payload: err.response.data
+                payload: err.response
             });
         });
 };
@@ -45,4 +45,26 @@ export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const logout = () => dispatch => {
     dispatch({ type: LOGOUT_SUCCESS });
     localStorage.removeItem("token");
+}
+
+
+export const GETALLUSERS_START = "GETALLUSERS_START";
+export const GETALLUSERS_SUCCESS = "GETALLUSERS_SUCCESS";
+export const GETALLUSERS_FAILURE = "GETALLUSERS_FAILURE";
+export const getAllUsers = () => dispatch => {
+    dispatch({ type: GETALLUSERS_START });
+    axiosWithAuth()
+        .get(`/users`)
+        .then(res => {
+            dispatch({
+                type: GETALLUSERS_SUCCESS,
+                payload: res.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type: GETALLUSERS_FAILURE,
+                payload: err.response
+            })
+        })
 }
