@@ -12,8 +12,37 @@ export const register = user => dispatch => {
             return true;
         })
         .catch(err => {
-            console.log(user)
-
             dispatch({ type: REGISTER_FAILURE, payload: err.response })
         });
 };
+
+
+export const LOGIN_START = "LOGIN_START";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAILURE = "LOGIN_FAILURE";
+export const login = credentials => dispatch => {
+    dispatch({ type: LOGIN_START });
+    return axiosWithAuth()
+        .post("/auth/login", credentials)
+        .then(res => {
+            localStorage.setItem("token", res.data.token);
+            dispatch({
+                type: LOGIN_SUCCESS,
+                payload: res.data.instructor
+            });
+            return true;
+        })
+        .catch(err => {
+            dispatch({
+                type: LOGIN_FAILURE,
+                payload: err.response.data
+            });
+        });
+};
+
+
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+export const logout = () => dispatch => {
+    dispatch({ type: LOGOUT_SUCCESS });
+    localStorage.removeItem("token");
+}
